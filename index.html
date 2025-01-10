@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triangle Perimeter Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #e0e8ff, #f5f7ff);
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4a90e2;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            background: #357abd;
+        }
+
+        .result {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .error {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Triangle Perimeter Calculator</h1>
+        <form id="triangleForm" onsubmit="calculatePerimeter(event)">
+            <div class="input-group">
+                <label for="sideA">Side A:</label>
+                <input type="number" id="sideA" step="any" required>
+                <div class="error" id="errorA"></div>
+            </div>
+            <div class="input-group">
+                <label for="sideB">Side B:</label>
+                <input type="number" id="sideB" step="any" required>
+                <div class="error" id="errorB"></div>
+            </div>
+            <div class="input-group">
+                <label for="sideC">Side C:</label>
+                <input type="number" id="sideC" step="any" required>
+                <div class="error" id="errorC"></div>
+            </div>
+            <button type="submit">Calculate Perimeter</button>
+        </form>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calculatePerimeter(event) {
+            event.preventDefault();
+            
+            // Reset errors and result
+            document.querySelectorAll('.error').forEach(el => el.style.display = 'none');
+            document.getElementById('result').classList.remove('show');
+            
+            // Get input values
+            const a = parseFloat(document.getElementById('sideA').value);
+            const b = parseFloat(document.getElementById('sideB').value);
+            const c = parseFloat(document.getElementById('sideC').value);
+            
+            // Validate inputs
+            if (a <= 0) {
+                showError('errorA', 'Side A must be greater than 0');
+                return;
+            }
+            if (b <= 0) {
+                showError('errorB', 'Side B must be greater than 0');
+                return;
+            }
+            if (c <= 0) {
+                showError('errorC', 'Side C must be greater than 0');
+                return;
+            }
+            
+            // Check triangle inequality
+            if (a + b <= c || b + c <= a || a + c <= b) {
+                showError('errorA', 'Invalid triangle: sum of any two sides must be greater than the third side');
+                return;
+            }
+            
+            // Calculate perimeter
+            const perimeter = a + b + c;
+            
+            // Display result
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = `Perimeter = ${perimeter.toFixed(2)} units`;
+            resultDiv.classList.add('show');
+        }
+
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
